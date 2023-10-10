@@ -443,6 +443,16 @@ impl Value for str {
     }
 }
 
+impl<T: Value> crate::sealed::Sealed for Option<T> {}
+
+impl<T: Value> Value for Option<T> {
+    fn record(&self, key: &Field, visitor: &mut dyn Visit) {
+        if let Some(v) = &self {
+            v.record(key, visitor)
+        }
+    }
+}
+
 #[cfg(feature = "std")]
 impl crate::sealed::Sealed for dyn std::error::Error + 'static {}
 

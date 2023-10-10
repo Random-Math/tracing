@@ -443,3 +443,111 @@ fn constant_field_name() {
 
     handle.assert_finished();
 }
+
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen_test::wasm_bindgen_test)]
+#[test]
+fn option_values() {
+    let (subscriber, handle) = collector::mock()
+        .event(
+            expect::event().with_fields(
+                expect::field("some_str")
+                    .with_value(&"yes")
+                    .and(expect::field("some_bool").with_value(&true))
+                    .and(expect::field("some_u64").with_value(&42_u64))
+                    .only(),
+            ),
+        )
+        .only()
+        .run_with_handle();
+
+    with_default(subscriber, || {
+        let some_str = Some("yes");
+        let none_str: Option<&'static str> = None;
+        let some_bool = Some(true);
+        let none_bool: Option<bool> = None;
+        let some_u64 = Some(42_u64);
+        let none_u64: Option<u64> = None;
+        trace!(
+            some_str = some_str,
+            none_str = none_str,
+            some_bool = some_bool,
+            none_bool = none_bool,
+            some_u64 = some_u64,
+            none_u64 = none_u64
+        );
+    });
+
+    handle.assert_finished();
+}
+
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen_test::wasm_bindgen_test)]
+#[test]
+fn option_ref_values() {
+    let (subscriber, handle) = collector::mock()
+        .event(
+            expect::event().with_fields(
+                expect::field("some_str")
+                    .with_value(&"yes")
+                    .and(expect::field("some_bool").with_value(&true))
+                    .and(expect::field("some_u64").with_value(&42_u64))
+                    .only(),
+            ),
+        )
+        .only()
+        .run_with_handle();
+
+    with_default(subscriber, || {
+        let some_str = &Some("yes");
+        let none_str: &Option<&'static str> = &None;
+        let some_bool = &Some(true);
+        let none_bool: &Option<bool> = &None;
+        let some_u64 = &Some(42_u64);
+        let none_u64: &Option<u64> = &None;
+        trace!(
+            some_str = some_str,
+            none_str = none_str,
+            some_bool = some_bool,
+            none_bool = none_bool,
+            some_u64 = some_u64,
+            none_u64 = none_u64
+        );
+    });
+
+    handle.assert_finished();
+}
+
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen_test::wasm_bindgen_test)]
+#[test]
+fn option_ref_mut_values() {
+    let (subscriber, handle) = collector::mock()
+        .event(
+            expect::event().with_fields(
+                expect::field("some_str")
+                    .with_value(&"yes")
+                    .and(expect::field("some_bool").with_value(&true))
+                    .and(expect::field("some_u64").with_value(&42_u64))
+                    .only(),
+            ),
+        )
+        .only()
+        .run_with_handle();
+
+    with_default(subscriber, || {
+        let some_str = &mut Some("yes");
+        let none_str: &mut Option<&'static str> = &mut None;
+        let some_bool = &mut Some(true);
+        let none_bool: &mut Option<bool> = &mut None;
+        let some_u64 = &mut Some(42_u64);
+        let none_u64: &mut Option<u64> = &mut None;
+        trace!(
+            some_str = some_str,
+            none_str = none_str,
+            some_bool = some_bool,
+            none_bool = none_bool,
+            some_u64 = some_u64,
+            none_u64 = none_u64
+        );
+    });
+
+    handle.assert_finished();
+}
