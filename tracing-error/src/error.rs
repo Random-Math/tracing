@@ -449,6 +449,12 @@ where
     }
 }
 
+impl<E> ExtractSpanTrace for TracedError<E> {
+    fn span_trace(&self) -> Option<&SpanTrace> {
+        Some(&self.inner.span_trace)
+    }
+}
+
 impl ExtractSpanTrace for dyn Error + 'static {
     fn span_trace(&self) -> Option<&SpanTrace> {
         self.downcast_ref::<ErrorImpl<Erased>>()
